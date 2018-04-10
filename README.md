@@ -6,4 +6,4 @@ This is a solution to Bonus2 homework of FP lecture. The solution is far away fr
 - *runGame* function can be simplified with new *GameState* type.
 - *readCards* and *readMoves* functions can be improved.
 
-You are not bounded only to these problems, you can change anywhere else in the code if you see an improvement. You can even rewrite the functions with higher order functions to get rid of annoying recursions. If you are not familiar with *'Sending Pull Request'*, you can look at this [link](https://help.github.com/articles/creating-a-pull-request/)
+You are not bounded only to these problems, you can change anywhere else in the code if you see an improvement. You can even rewrite the functions with higher order functions to get rid of annoying recursions. If you are not familiar with concept of *'Sending Pull Request'*, you can look at this [link](https://help.github.com/articles/creating-a-pull-request/)
