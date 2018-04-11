@@ -1,0 +1,416 @@
+- init:
+     run: rm -f bonus2 Main.hi Main.o
+     visible: false
+     
+- compile:
+     run: ghc Main.hs -o bonus2
+     blocker: true
+
+- base_case1:
+     run: ./bonus2
+     script:
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'c1'
+        - send: 's1'
+        - send: 'c1'
+        - send: 's1'
+        - send: '.'      
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'd'
+        - send: 'd'
+        - send: 'd'
+        - send: 'd'
+        - send: 'd'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '42'
+        - expect: '[Ss]core:\s+3'
+        - expect: _EOF_
+
+- base_case2:
+     run: ./bonus2
+     script: 
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'cj'
+        - send: 's8'
+        - send: '.'
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'd'
+        - send: 'rhj'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '42'
+        - expect: 'bonus2:(.*?)\s+'
+        - expect: _EOF_
+     return: 1
+
+- unknown_suit_case1:
+     run: ./bonus2
+     script: 
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'y1'
+        - send: '.'
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'ry1'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '5'
+        - expect: 'bonus2:(.*?)\s+'
+        - expect: _EOF_
+     return: 1
+
+- unknown_suit_case2:
+     run: ./bonus2
+     script: 
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'p1'
+        - send: '.'
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'ry1'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '5'
+        - expect: 'bonus2:(.*?)\s+'
+        - expect: _EOF_
+     return: 1
+
+- unknown_rank_case1:
+     run: ./bonus2
+     script: 
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'sr'
+        - send: '.'
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'rsr'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '5'
+        - expect: 'bonus2:(.*?)\s+'
+        - expect: _EOF_
+     return: 1
+
+- unknown_rank_case2:
+     run: ./bonus2
+     script: 
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'pt'
+        - send: '.'
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'rpt'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '5'
+        - expect: 'bonus2:(.*?)\s+'
+        - expect: _EOF_
+     return: 1
+     
+- unknown_move_case:
+     run: ./bonus2
+     script: 
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'pt'
+        - send: '.'
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'm'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '5'
+        - expect: 'bonus2:(.*?)\s+'
+        - expect: _EOF_
+     return: 1
+     
+- capital_card_case:
+     run: ./bonus2
+     script: 
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'SJ'
+        - send: 'C1'
+        - send: 'DT'
+        - send: 'H1'
+        - send: '.'
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'd'
+        - send: 'd'
+        - send: 'd'
+        - send: 'd'
+        - send: 'rH1'
+        - send: 'rC1'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '42'
+        - expect: '[Ss]core:\s+22'
+        - expect: _EOF_
+
+- capital_move_case:
+     run: ./bonus2
+     script: 
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'sj'
+        - send: 'c1'
+        - send: 'dt'
+        - send: 'h1'
+        - send: '.'
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'D'
+        - send: 'D'
+        - send: 'D'
+        - send: 'D'
+        - send: 'Rh1'
+        - send: 'rC1'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '42'
+        - expect: '[Ss]core:\s+22'
+        - expect: _EOF_
+
+- different_color_under_goal_case1:
+     run: ./bonus2
+     script:
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'c6'
+        - send: 'd4'
+        - send: '.'      
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'd'
+        - send: 'd'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '10'
+        - expect: '[Ss]core:\s+0'
+        - expect: _EOF_
+        
+- different_color_under_goal_case2:
+     run: ./bonus2
+     script:
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'c6'
+        - send: 'dt'
+        - send: '.'      
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'd'
+        - send: 'd'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '20'
+        - expect: '[Ss]core:\s+4'
+        - expect: _EOF_
+               
+- different_color_over_goal_case1:
+     run: ./bonus2
+     script:
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'hj'
+        - send: 's1'
+        - send: '.'      
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'd'
+        - send: 'd'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '11'
+        - expect: '[Ss]core:\s+30'
+        - expect: _EOF_       
+        
+- different_color_over_goal_case2:
+     run: ./bonus2
+     script:
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'hj'
+        - send: 's1'
+        - send: '.'      
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'd'
+        - send: 'd'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '11'
+        - expect: '[Ss]core:\s+30'
+        - expect: _EOF_
+
+- same_color_under_goal_case1:
+     run: ./bonus2
+     script:
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'h6'
+        - send: 'dq'
+        - send: '.'      
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'd'
+        - send: 'd'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '20'
+        - expect: '[Ss]core:\s+2'
+        - expect: _EOF_
+
+- same_color_under_goal_case2:
+     run: ./bonus2
+     script:
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'h6'
+        - send: 'dq'
+        - send: 'd2'
+        - send: 'hq'
+        - send: '.'      
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'd'
+        - send: 'd'
+        - send: 'd'
+        - send: 'rdq'
+        - send: 'd'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '20'
+        - expect: '[Ss]core:\s+1'
+        - expect: _EOF_
+
+- same_color_under_goal_case3:
+     run: ./bonus2
+     script:
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'h5'
+        - send: 'h6'
+        - send: 'h8'
+        - send: 'dq'
+        - send: '.'      
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'd'
+        - send: 'd'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '11'
+        - expect: '[Ss]core:\s+0'
+        - expect: _EOF_
+
+- same_color_over_goal_case1:
+     run: ./bonus2
+     script:
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'cj'
+        - send: 's1'
+        - send: '.'      
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'd'
+        - send: 'd'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '11'
+        - expect: '[Ss]core:\s+15'
+        - expect: _EOF_
+
+- same_color_over_goal_case2:
+     run: ./bonus2
+     script:
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'd2'
+        - send: 'h3'
+        - send: 'd4'
+        - send: 'h5'
+        - send: '.'      
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'd'
+        - send: 'd'
+        - send: 'd'
+        - send: 'd'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '10'
+        - expect: '[Ss]core:\s+6'
+        - expect: _EOF_
+
+- over_goal_stop_case:
+     run: ./bonus2
+     script:
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'hq'
+        - send: 'h6'
+        - send: 'h8'
+        - send: 'd5'
+        - send: 'd2'
+        - send: '.'      
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'd'
+        - send: 'd'
+        - send: 'rhq'
+        - send: 'd'
+        - send: 'rh8'
+        - send: 'd'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '11'
+        - expect: '[Ss]core:\s+7'
+        - expect: _EOF_
+
+- no_card_left_case:
+     run: ./bonus2
+     script:
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'h6'
+        - send: 'dq'
+        - send: 'd2'
+        - send: 'hq'
+        - send: '.'      
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'd'
+        - send: 'd'
+        - send: 'd'
+        - send: 'd'
+        - send: 'rhq'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '20'
+        - expect: '[Ss]core:\s+12'
+        - expect: _EOF_
+        
+- random_case1:
+     run: ./bonus2
+     script:
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'hq'
+        - send: 'sq'
+        - send: 'd3'
+        - send: 'c9'
+        - send: 'ck'
+        - send: 's6'
+        - send: 's9'
+        - send: 's7'
+        - send: 'h7'
+        - send: '.'      
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'd'
+        - send: 'd'
+        - send: 'd'
+        - send: 'rd3'
+        - send: 'd'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '30'
+        - expect: '[Ss]core:\s+1'
+        - expect: _EOF_
+ 
+- random_case2:
+     run: ./bonus2
+     script:
+        - expect: '[Ee]nter [Cc]ards?(.*?):\s+' # timeout: 2
+        - send: 'hq'
+        - send: 'sq'
+        - send: 'd3'
+        - send: 'c9'
+        - send: 'ck'
+        - send: 's6'
+        - send: 's9'
+        - send: 's7'
+        - send: 'h7'
+        - send: '.'      
+        - expect: '[Ee]nter [Mm]oves?(.*?):\s+' # timeout: 2
+        - send: 'd'
+        - send: 'd'
+        - send: 'd'
+        - send: 'd'
+        - send: 'd'
+        - send: '.'
+        - expect: '[Ee]nter [Gg]oal(.*?):\s+' # timeout: 2
+        - send: '42'
+        - expect: '[Ss]core:\s+0'
+        - expect: _EOF_
+

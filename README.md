@@ -7,3 +7,9 @@ This is a solution to Bonus2 homework of FP course. The solution is far from per
 - `readCards` and `readMoves` functions can be improved.
 
 You are not bounded only to these problems, feel free to change anywhere else in the code if you see an improvement. You can even rewrite the functions with higher order functions to get rid of annoying recursions. If you are not familiar with concept of *'Sending Pull Request'*, you can look at this [link](https://help.github.com/articles/creating-a-pull-request/)
+
+### Testing
+
+You can use [calico](https://calico.readthedocs.io) to test the program. To run the tests (in main directory):
+
+> calico ./test/solitaire.yaml
