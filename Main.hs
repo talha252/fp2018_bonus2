@@ -28,15 +28,8 @@ cardValue (Card {suit = _, rank = r}) = case r of
    _       -> 10
    
 removeCard :: CardList -> Card -> CardList
-removeCard cs c 
-   | c `notElem` cs = error "Not in deck"
-   | otherwise         = removeCard' [] cs c
-      where
-      removeCard' :: [Card] -> [Card] -> Card -> [Card]
-      removeCard' acc []     _ = acc
-      removeCard' acc (c':cs) c''
-         | c' == c''   = acc ++ cs
-         | otherwise = removeCard' (c':acc) cs c'' 
+removeCard [] _       = error "Not in deck"
+removeCard (c':cs') c = if c' == c then cs' else c' : removeCard cs' c
 
 sumCards :: CardList -> Int
 sumCards cs = sumCards' 0 cs
@@ -148,18 +141,3 @@ main = do putStrLn "Enter cards:"
           let goal = read line :: Int
           let score = runGame cards moves goal
           putStrLn ("Score: " ++ show score)   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-
