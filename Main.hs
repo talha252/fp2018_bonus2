@@ -97,13 +97,13 @@ convertRank c
    | isDigit c     = Num (digitToInt c)
    | otherwise     = error "Unknown rank"
    
-convertCard :: Char -> Char -> Card
-convertCard s r = Card (convertSuit s) (convertRank r)
+convertCard :: (Char, Char) -> Card
+convertCard (s, r) = Card (convertSuit s) (convertRank r)
 
 convertMove :: (Char, Char, Char) -> Move
 convertMove (m, s, r)
    | m `elem` "dD" = Draw
-   | m `elem` "rR" = Discard (convertCard s r)
+   | m `elem` "rR" = Discard (convertCard (s, r))
    | otherwise     = error "Unrecognized move"
 
 readCards :: IO CardList
@@ -111,10 +111,10 @@ readCards = do line <- getLine
                if line == "."
                   then return []
                   else do rest <- readCards
-                          return (validateAndConvertCard line : rest) where
-                            validateAndConvertCard :: String -> Card
-                            validateAndConvertCard [c1,c2] = convertCard c1 c2
-                            validateAndConvertCard _       = error "invalid string for card"
+                          return ((convertCard.validate) line : rest) where
+                            validate :: String -> (Char, Char)
+                            validate [c1,c2] = (c1, c2)
+                            validate _       = error "Invalid string for card"
 
 readMoves :: IO [Move]
 readMoves = do line <- getLine
@@ -123,7 +123,7 @@ readMoves = do line <- getLine
                   else do rest <- readMoves
                           return ((convertMove.validate) line : rest) where
                             err :: a
-                            err = error "Unknown move"
+                            err = error "Invalid string for move"
 
                             validate :: String -> (Char, Char, Char)
                             validate [c1]       = if (c1 == 'd' || c1 == 'D') then (c1, 'x', 'x') else err
