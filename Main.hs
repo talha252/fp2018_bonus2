@@ -111,7 +111,7 @@ readCards = do line <- getLine
                if line == "."
                   then return []
                   else do rest <- readCards
-                          return ((convertCard.validate) line : rest) where
+                          return ((convertCard . validate) line : rest) where
                             validate :: String -> (Char, Char)
                             validate [c1,c2] = (c1, c2)
                             validate _       = error "Invalid string for card"
@@ -121,14 +121,11 @@ readMoves = do line <- getLine
                if line == "."
                   then return []
                   else do rest <- readMoves
-                          return ((convertMove.validate) line : rest) where
-                            err :: a
-                            err = error "Invalid string for move"
-
+                          return ((convertMove . validate) line : rest) where
                             validate :: String -> (Char, Char, Char)
-                            validate [c1]       = if (c1 == 'd' || c1 == 'D') then (c1, 'x', 'x') else err
-                            validate [c1,c2,c3] = if (c1 == 'r' || c1 == 'R') then (c1, c2, c3) else err
-                            validate _          = err
+                            validate [c1]       = (c1, 'x', 'x')
+                            validate [c1,c2,c3] = (c1, c2, c3)
+                            validate _          = error "Invalid string for move"
 
 main = do putStrLn "Enter cards:"
           cards <- readCards
