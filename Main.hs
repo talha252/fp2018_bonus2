@@ -100,8 +100,8 @@ convertRank c
 convertCard :: Char -> Char -> Card
 convertCard s r = Card (convertSuit s) (convertRank r)
 
-convertMove :: Char -> Char -> Char -> Move
-convertMove m s r
+convertMove :: (Char, Char, Char) -> Move
+convertMove (m, s, r)
    | m `elem` "dD" = Draw
    | m `elem` "rR" = Discard (convertCard s r)
    | otherwise     = error "Unrecognized move"
@@ -121,14 +121,14 @@ readMoves = do line <- getLine
                if line == "."
                   then return []
                   else do rest <- readMoves
-                          return (validateAndConvertMove line : rest) where
+                          return ((convertMove.validate) line : rest) where
                             err :: a
-                            err = error "invalid string for move"
+                            err = error "Unknown move"
 
-                            validateAndConvertMove :: String -> Move
-                            validateAndConvertMove [c1]       = if (c1 == 'd' || c1 == 'D') then Draw else err
-                            validateAndConvertMove [c1,c2,c3] = if (c1 == 'r' || c1 == 'R') then Discard (convertCard c2 c3) else err
-                            validateAndConvertMove _          = err
+                            validate :: String -> (Char, Char, Char)
+                            validate [c1]       = if (c1 == 'd' || c1 == 'D') then (c1, 'x', 'x') else err
+                            validate [c1,c2,c3] = if (c1 == 'r' || c1 == 'R') then (c1, c2, c3) else err
+                            validate _          = err
 
 main = do putStrLn "Enter cards:"
           cards <- readCards
