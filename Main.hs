@@ -111,7 +111,7 @@ readCards = do line <- getLine
                if line == "."
                   then return []
                   else do rest <- readCards
-                          return ([validateAndConvertCard line] ++ rest) where
+                          return (validateAndConvertCard line : rest) where
                             validateAndConvertCard :: String -> Card
                             validateAndConvertCard [c1,c2] = convertCard c1 c2
                             validateAndConvertCard _       = error "invalid string for card"
@@ -121,7 +121,7 @@ readMoves = do line <- getLine
                if line == "."
                   then return []
                   else do rest <- readMoves
-                          return ([validateAndConvertMove line] ++ rest) where
+                          return (validateAndConvertMove line : rest) where
                             err :: a
                             err = error "invalid string for move"
 
