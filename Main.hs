@@ -90,47 +90,35 @@ convertRank c
    | isDigit c     = Num (digitToInt c)
    | otherwise     = error "Unknown rank"
    
-convertCard :: Char -> Char -> Card
-convertCard s r = Card (convertSuit s) (convertRank r)
+convertCard :: (Char, Char) -> Card
+convertCard (s, r) = Card (convertSuit s) (convertRank r)
 
-convertMove :: Char -> Char -> Char -> Move
-convertMove m s r
+convertMove :: (Char, Char, Char) -> Move
+convertMove (m, s, r)
    | m `elem` "dD" = Draw
-   | m `elem` "rR" = Discard (convertCard s r)
+   | m `elem` "rR" = Discard (convertCard (s, r))
    | otherwise     = error "Unrecognized move"
 
-readCards :: IO [Card]
-readCards = readCards' []
-   where
-   readCards' :: [Card] -> IO [Card]
-   readCards' cs = do
-      s <- getChar
-      if s == '.'
-         then do getChar -- to get new line character
-                 return cs
-         else do r <- getChar
-                 getChar -- to get new line character
-                 let c = convertCard s r
-                 readCards' (cs ++ [c])
+readCards :: IO CardList
+readCards = do line <- getLine
+               if line == "."
+                  then return []
+                  else do rest <- readCards
+                          return ((convertCard . validate) line : rest) where
+                            validate :: String -> (Char, Char)
+                            validate [c1,c2] = (c1, c2)
+                            validate _       = error "Invalid string for card"
 
 readMoves :: IO [Move]
-readMoves = readMoves' []
-   where
-   readMoves' :: [Move] -> IO [Move]
-   readMoves' ms = do
-      m <- getChar
-      if m == '.'
-         then do getChar -- to get new line character
-                 return ms
-         else if m `elem` "dD"
-              then do let m' = convertMove m ' ' ' '
-                      getChar  -- to get new line character
-                      readMoves' (ms ++ [m'])
-              else do s <- getChar
-                      r <- getChar
-                      getChar -- to get new line character
-                      let m' = convertMove m s r
-                      readMoves' (ms ++ [m'])
+readMoves = do line <- getLine
+               if line == "."
+                  then return []
+                  else do rest <- readMoves
+                          return ((convertMove . validate) line : rest) where
+                            validate :: String -> (Char, Char, Char)
+                            validate [c1]       = (c1, 'x', 'x')
+                            validate [c1,c2,c3] = (c1, c2, c3)
+                            validate _          = error "Invalid string for move"
 
 main = do putStrLn "Enter cards:"
           cards <- readCards
